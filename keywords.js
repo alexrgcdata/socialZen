@@ -3,7 +3,7 @@
 
 var BLOCK_KEYWORDS = [
   // Easy smoke-test terms. These are intentionally broad for the first demo.
-  "socialzen test",
+  /* "socialzen test",
   "check",
   "cool",
   "heart",
@@ -11,9 +11,9 @@ var BLOCK_KEYWORDS = [
   "look",
   "at",
   "mad",
-  "news",
+  "news", */
   "navy",
-
+   
   // People and movements
   "donald trump",
   "trump",
