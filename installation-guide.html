@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SocialZen Installation Guide</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3efe7;
+      --panel: #fffaf2;
+      --ink: #1f2933;
+      --muted: #5b6572;
+      --accent: #2f6f62;
+      --accent-2: #d46a3f;
+      --line: rgba(31, 41, 51, 0.12);
+      --shadow: 0 18px 50px rgba(31, 41, 51, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      background:
+        radial-gradient(circle at top left, rgba(47, 111, 98, 0.12), transparent 30%),
+        radial-gradient(circle at top right, rgba(212, 106, 63, 0.10), transparent 26%),
+        var(--bg);
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      line-height: 1.55;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    a:hover, a:focus {
+      color: var(--accent-2);
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 20px;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,250,242,0.96));
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-art {
+      width: 100%;
+      max-height: 220px;
+      object-fit: cover;
+      border-radius: 18px;
+      margin-top: 18px;
+      border: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.78rem;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 1.05;
+    }
+
+    .lede {
+      margin: 0;
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 65ch;
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, rgba(47, 111, 98, 0.12), rgba(212, 106, 63, 0.12));
+      padding: 10px;
+    }
+
+    .avatar-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      border-radius: 50%;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .card {
+      grid-column: span 12;
+      background: rgba(255, 250, 242, 0.9);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(31, 41, 51, 0.06);
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.3rem;
+    }
+
+    .cards-2 .card {
+      grid-column: span 6;
+    }
+
+    .step-list {
+      margin: 0;
+      padding-left: 1.2rem;
+    }
+
+    .step-list li + li {
+      margin-top: 10px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(47, 111, 98, 0.10);
+      color: var(--ink);
+      border: 1px solid rgba(47, 111, 98, 0.16);
+      font-size: 0.95rem;
+      text-decoration: none;
+    }
+
+    .note {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin: 12px 0 0;
+    }
+
+    .callout {
+      border-left: 5px solid var(--accent-2);
+      background: rgba(212, 106, 63, 0.07);
+    }
+
+    .fineprint {
+      margin-top: 20px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .brand strong {
+      color: var(--ink);
+    }
+
+    .pill {
+      display: inline-block;
+      margin-right: 8px;
+      margin-top: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 760px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: left;
+      }
+
+      .avatar {
+        width: 104px;
+        height: 104px;
+      }
+
+      .cards-2 .card {
+        grid-column: span 12;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero" aria-labelledby="title">
+      <div class="avatar" aria-hidden="true"><img class="avatar-image" src="assets/alex-avatar.png" alt="Friendly cartoon avatar of Alex Seidler, a bald smiling man"></div>
+      <div>
+        <p class="eyebrow">SocialZen by Alex Seidler</p>
+        <h1 id="title">Offline installation guide</h1>
+        <p class="lede">
+          This guide works offline once the project folder is downloaded. It explains how to load SocialZen in Chrome, Edge, or Safari, with the note that the current build is tested first for Chrome and Edge.
+        </p>
+        <img class="hero-art" src="assets/socialzen-guide-hero.png" alt="Calm laptop scene with social-feed notifications fading into a peaceful landscape">
+      </div>
+    </section>
+
+    <section class="grid cards-2" aria-label="Browser guidance">
+      <article class="card">
+        <h2>Chrome</h2>
+        <ol class="step-list">
+          <li>Unzip the SocialZen folder anywhere you like.</li>
+          <li>Open <strong>chrome://extensions</strong>.</li>
+          <li>Turn on <strong>Developer mode</strong>.</li>
+          <li>Choose <strong>Load unpacked</strong> and select the unzipped project folder.</li>
+          <li>Pin SocialZen if you want quick access to the popup.</li>
+        </ol>
+        <p class="note">Best first check: Chrome on Windows, because that is the primary test target for this build.</p>
+      </article>
+
+      <article class="card">
+        <h2>Edge</h2>
+        <ol class="step-list">
+          <li>Unzip the SocialZen folder.</li>
+          <li>Open <strong>edge://extensions</strong>.</li>
+          <li>Enable <strong>Developer mode</strong>.</li>
+          <li>Select <strong>Load unpacked</strong> and pick the project folder.</li>
+          <li>Open Facebook and confirm the filter is active.</li>
+        </ol>
+        <p class="note">Edge uses the same unpacked-extension flow as Chrome, so setup should feel nearly identical.</p>
+      </article>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Safari</h2>
+        <p>
+          Safari Web Extensions use a different packaging path than Chrome and Edge. For the first demo, treat Safari as a later-step guide rather than the primary install target.
+        </p>
+        <div class="badge-row" aria-label="Safari guidance">
+          <span class="pill">Chrome/Edge first</span>
+          <span class="pill">Safari later</span>
+          <span class="pill">No build step</span>
+        </div>
+        <p class="note">
+          If you plan to adapt it for Safari later, keep the source simple and standards-based so the structure can be carried forward.
+        </p>
+      </article>
+    </section>
+
+    <section class="grid">
+      <article class="card callout">
+        <h2>What you get</h2>
+        <p>
+          SocialZen by Alex Seidler soft-hides emotionally charged political posts on Facebook so the feed feels calmer and easier to browse. The extension is designed to stay small, readable, and easy to edit.
+        </p>
+        <p class="note">
+          The keyword lists are meant to be editable in the project files, and the extension is intended to be loaded directly from the unzipped folder.
+        </p>
+      </article>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Need help?</h2>
+        <p class="brand">
+          <strong>Alex Seidler</strong>
+          <span>· Full Stack Developer · FileMaker * Web * Mobile ·</span>
+          <span>and</span>
+          <a href="https://rgcdata.com" target="_blank" rel="noopener noreferrer">rgcdata.com</a>
+          <span>build custom software and handle system integrations and database work.</span>
+        </p>
+        <p class="fineprint"><em>From backend systems to frontend user experiences — I’d love to discuss a project.</em></p>
+        <div class="badge-row">
+          <a class="badge" href="mailto:alex@rgcdata.com">Email alex@rgcdata.com</a>
+          <a class="badge" href="https://rgcdata.com" target="_blank" rel="noopener noreferrer">Visit rgcdata.com</a>
+        </div>
+        <p class="fineprint">
+          Lightweight, offline, and friendly to print or share as a single file.
+        </p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

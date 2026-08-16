@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "SocialZen Political Filter",
+  "version": "1.0.1",
+  "description": "Soft-hides political and emotion-spurring Facebook posts. By Alex Seidler.",
+  "author": "Alex Seidler — rgcdata.com",
+  "permissions": ["storage"],
+  "host_permissions": ["https://www.facebook.com/*", "https://facebook.com/*", "https://m.facebook.com/*"],
+  "action": {
+    "default_title": "SocialZen Political Filter",
+    "default_icon": "assets/socialzen-icon.png",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "128": "assets/socialzen-icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.facebook.com/*", "https://facebook.com/*", "https://m.facebook.com/*"],
+      "js": ["keywords.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/socialzen-logo.svg"],
+      "matches": ["https://www.facebook.com/*", "https://facebook.com/*", "https://m.facebook.com/*"]
+    }
+  ]
+}
