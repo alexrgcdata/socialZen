@@ -2,9 +2,15 @@
 
 I built SocialZen because I was tired of political posts taking over my Facebook feed. I wanted a way to choose the subjects I did not want to see and give myself a break from them.
 
-SocialZen is a small browser extension that matches the words you choose and masks those posts with CSS. The included list starts with politics and arguments, but you can replace it with any subjects you want to avoid.
+SocialZen is a small browser extension that matches the words you choose and uses browser styling to blur, fade, and shorten those posts. The included list starts with politics and arguments, but you can replace it with any subjects you want to avoid.
 
-[Project page](https://alexseidler.dev/work/socialzen/) | [Download v1.0.2](https://alexseidler.dev/downloads/socialzen/socialzen-1.0.2.zip)
+[Project page](https://alexseidler.dev/work/socialzen/) | [Source](https://github.com/alexrgcdata/socialZen) | [Release v1.0.2](https://github.com/alexrgcdata/socialZen/releases/tag/v1.0.2) | [Download ZIP](https://github.com/alexrgcdata/socialZen/releases/download/v1.0.2/socialzen-1.0.2.zip)
+
+- **Available now:** v1.0.2, installed manually in desktop Chrome or Edge. There is no browser-store release or keyword editor in the popup; you edit `keywords.js`.
+- **Checked:** seven automated tests pass on the current source using fictional posts and a simulated extension API. The illustration below runs the actual masking code on a fictional feed.
+- **Still unverified:** current signed-in Facebook coverage and installation as a native Chrome or Edge extension. The demo and tests do not establish those.
+
+The current `main` branch also fixes a mask that could stick when a post changed to very short text. That fix and its two regression tests are **not included in the existing v1.0.2 ZIP**. The published ZIP and tag have been left unchanged.
 
 ![Fictional feed demonstration using the actual SocialZen masking code](demo/socialzen-demo.jpg)
 
@@ -17,7 +23,7 @@ The image uses fictional people and posts. It is not a screenshot of Facebook.
 3. Enable **Developer mode**, choose **Load unpacked**, and select the folder containing `manifest.json`.
 4. Open or reload Facebook. Pin SocialZen to reach its on/off switch.
 
-There is no build step, account, API key, or subscription. This is a manual unpacked installation, not a Chrome Web Store release. The offline `installation-guide.html` has the same setup steps. The packaged extension targets desktop Chrome and Edge; Safari and mobile-browser installation are not supported by this package.
+There is no build step, SocialZen account, API key, or subscription. This is a manual unpacked installation, not a Chrome Web Store release. The offline `installation-guide.html` has the same setup steps; keep its `assets` folder alongside it. The packaged extension targets desktop Chrome and Edge; Safari and mobile-browser installation are not supported by this package.
 
 ## Choose your keywords
 
@@ -36,7 +42,7 @@ Matching ignores capitalization, repeated whitespace, and curly apostrophes. It 
 
 The content script looks for Facebook post containers and checks their rendered text. Matching posts are blurred, faded, and shortened. **Temporarily Show** reveals a post for four seconds before the mask returns. The popup switch disables or enables filtering; its setting stays in `chrome.storage.local`.
 
-A `MutationObserver` watches newly loaded and changed feed content, with a short delay to combine changes before scanning. Controls sit outside the blurred post so they remain readable. Filtering changes the page in your browser. It does not delete posts, unfollow people, or change your Facebook account.
+A `MutationObserver`, the browser's page-change watcher, checks newly loaded and changed feed content after a short delay. Controls sit outside the blurred post so they remain readable. Filtering changes the page in your browser. It does not delete posts, unfollow people, or change your Facebook account.
 
 ## Privacy and limits
 
@@ -44,7 +50,7 @@ The extension code has no analytics, external API calls, or remote filtering ser
 
 This is a text filter. It cannot understand context, recognize words inside images or video, or guarantee every post will be found. Facebook markup can change. The observer still rescans candidate posts across the page, so very long feeds may need performance work.
 
-Version 1.0.2 was checked with automated DOM fixtures and a browser demonstration using fictional posts and a stubbed extension API. Those checks do not establish current coverage of a signed-in Facebook feed or a native Chrome/Edge installation. The screenshot is explicitly labeled as a fictional demonstration.
+Version 1.0.2 passed five automated tests of simulated page elements and a browser demonstration using fictional posts and a simulated extension API. The current source adds two regression tests, for seven passing tests. Neither set establishes current coverage of a signed-in Facebook feed or a native Chrome/Edge installation. The screenshot is explicitly labeled as a fictional demonstration.
 
 ## Development checks
 
@@ -55,7 +61,19 @@ npm ci
 npm test
 ```
 
-The tests cover keyword matching, overrides, delayed posts, the temporary reveal, disabling during a reveal, and removed posts. `demo/index.html` runs the actual content script against fictional feed markup using a small local Chrome API stub. Serve the repository over localhost to view it. The demo never connects to Facebook.
+The seven tests use jsdom to simulate page elements. They cover normalized matching and override priority, substring matching and missing lists, new/changed/removed posts, reveal behavior across rescans, disabling during a reveal, unmasking shortened text, and disabling when a known post no longer meets the discovery rules. Tests shorten the four-second reveal timer to 650 ms; they check the state changes, not native browser timing or rendering. They do not test a real popup storage connection.
+
+`demo/index.html` runs the actual content script against fictional feed markup using a small local Chrome API stub. If Python is available, serve the repository with:
+
+```sh
+python -m http.server 4198 --bind 127.0.0.1
+```
+
+Then open `http://127.0.0.1:4198/demo/`. The demo never connects to Facebook and does not exercise native extension installation or storage.
+
+## Current source after v1.0.2
+
+A filtered post whose text changed below the scanner's 20-character minimum could keep its mask, even after filtering was switched off. The current source revisits already masked posts so changed text and the off switch can clear them. Two regression tests reproduce that case. This is an unreleased source fix; use the existing v1.0.2 release when you need the published package, or clone `main` to review the fix.
 
 ## Version 1.0.2
 
