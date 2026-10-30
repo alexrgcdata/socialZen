@@ -1,13 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "SocialZen Political Filter",
-  "version": "1.0.1",
-  "description": "Soft-hides political and emotion-spurring Facebook posts. By Alex Seidler.",
-  "author": "Alex Seidler — rgcdata.com",
+  "name": "SocialZen Keyword Filter",
+  "version": "1.0.2",
+  "description": "Mask Facebook posts using your own keywords. Blur matching posts, briefly reveal them, or switch filtering off. By Alex Seidler.",
+  "author": "Alex Seidler",
   "permissions": ["storage"],
   "host_permissions": ["https://www.facebook.com/*", "https://facebook.com/*", "https://m.facebook.com/*"],
   "action": {
-    "default_title": "SocialZen Political Filter",
+    "default_title": "SocialZen Keyword Filter",
     "default_icon": "assets/socialzen-icon.png",
     "default_popup": "popup.html"
   },

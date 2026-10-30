@@ -1,42 +1,68 @@
-# SocialZen Political Filter
+# SocialZen
 
-SocialZen is a tiny, private browser extension by **Alex Seidler** that soft-hides political and high-drama Facebook posts. It does not delete anything, send data anywhere, or use an external service.
+I built SocialZen because I was tired of political posts taking over my Facebook feed. I wanted a way to choose the subjects I did not want to see and give myself a break from them.
 
-Website: [rgcdata.com](https://rgcdata.com)
+SocialZen is a small browser extension that matches the words you choose and masks those posts with CSS. The included list starts with politics and arguments, but you can replace it with any subjects you want to avoid.
+
+[Project page](https://alexseidler.dev/work/socialzen/) | [Download v1.0.2](https://alexseidler.dev/downloads/socialzen/socialzen-1.0.2.zip)
+
+![Fictional feed demonstration using the actual SocialZen masking code](demo/socialzen-demo.jpg)
+
+The image uses fictional people and posts. It is not a screenshot of Facebook.
 
 ## Install in Chrome or Edge
 
-1. Download the project ZIP from GitHub.
-2. Unzip the ZIP file. Keep the unzipped folder somewhere easy to find.
-3. Open your browser's extensions page:
-   - Chrome: open `chrome://extensions`
-   - Edge: open `edge://extensions`
-4. Turn on **Developer mode**.
-5. Click **Load unpacked**.
-6. Select the unzipped SocialZen folder—the folder containing `manifest.json`.
-7. Open Facebook and use the small SocialZen toolbar button to turn filtering on or off.
+1. Download and extract the ZIP. Keep the extracted folder somewhere permanent.
+2. Open `chrome://extensions` or `edge://extensions`.
+3. Enable **Developer mode**, choose **Load unpacked**, and select the folder containing `manifest.json`.
+4. Open or reload Facebook. Pin SocialZen to reach its on/off switch.
 
-Chrome and Edge use the same unpacked-extension process for this project. The extension uses standard Manifest V3 APIs, `chrome.storage.local`, and `MutationObserver`, so no browser-specific build is needed for either one.
+There is no build step, account, API key, or subscription. This is a manual unpacked installation, not a Chrome Web Store release. The offline `installation-guide.html` has the same setup steps. The packaged extension targets desktop Chrome and Edge; Safari and mobile-browser installation are not supported by this package.
 
-## Editing the word lists
+## Choose your keywords
 
-Open `keywords.js` in any text editor.
+Edit `keywords.js` in a text editor. For example:
 
-- `BLOCK_KEYWORDS` contains words and phrases that can trigger the soft hide.
-- `OVERRIDE_KEYWORDS` is empty by default. Add a phrase there when you want matching posts to remain visible even if they also contain a blocked phrase.
+```js
+var BLOCK_KEYWORDS = ["election", "campaign", "spoiler"];
+var OVERRIDE_KEYWORDS = ["community fundraiser"];
+```
 
-Save the file, then reload Facebook. If the browser is still using the old file, reload the extension from its extensions page.
+Replace the existing arrays rather than adding a second copy. Keep each phrase in quotes, separated by commas. Reload the extension on its extensions page, then reload Facebook. There is no keyword editor in the popup.
 
-## What it does
+Matching ignores capitalization, repeated whitespace, and curly apostrophes. It uses substrings, not whole words or AI: `vote` also matches `devoted`. An override keeps the entire post visible even if a blocked term also appears. Broad keywords can mask posts you wanted to keep.
 
-Matching Facebook posts are blurred, faded, shortened, and marked **Political content filtered**. Click **Temporarily Show** to read one for four seconds. The filter then returns automatically. New posts loaded while scrolling are also checked.
+## How it works
 
-## Browser notes
+The content script looks for Facebook post containers and checks their rendered text. Matching posts are blurred, faded, and shortened. **Temporarily Show** reveals a post for four seconds before the mask returns. The popup switch disables or enables filtering; its setting stays in `chrome.storage.local`.
 
-This first release is designed and tested for unpacked Chrome and Edge extensions on Windows. Safari uses a different extension packaging workflow, so Safari support is a follow-up step rather than a claim that this exact folder is already Safari-ready.
+A `MutationObserver` watches newly loaded and changed feed content, with a short delay to combine changes before scanning. Controls sit outside the blurred post so they remain readable. Filtering changes the page in your browser. It does not delete posts, unfollow people, or change your Facebook account.
 
-## A tiny plug
+## Privacy and limits
 
-Need a custom tool, system integration, or database work? Alex Seidler — Full Stack Developer (FileMaker * Web * Mobile) — and [rgcdata.com](https://rgcdata.com) build practical software for that too.
+The extension code has no analytics, external API calls, or remote filtering service. Its only declared API permission is `storage`, with host access limited to the Facebook domains listed in `manifest.json`. The popup contains an ordinary link to rgcdata.com; opening it visits that website.
 
-> From backend systems to frontend user experiences — I’d love to discuss a project.
+This is a text filter. It cannot understand context, recognize words inside images or video, or guarantee every post will be found. Facebook markup can change. The observer still rescans candidate posts across the page, so very long feeds may need performance work.
+
+Version 1.0.2 was checked with automated DOM fixtures and a browser demonstration using fictional posts and a stubbed extension API. Those checks do not establish current coverage of a signed-in Facebook feed or a native Chrome/Edge installation. The screenshot is explicitly labeled as a fictional demonstration.
+
+## Development checks
+
+Node.js 20+ is used for development tests only:
+
+```sh
+npm ci
+npm test
+```
+
+The tests cover keyword matching, overrides, delayed posts, the temporary reveal, disabling during a reveal, and removed posts. `demo/index.html` runs the actual content script against fictional feed markup using a small local Chrome API stub. Serve the repository over localhost to view it. The demo never connects to Facebook.
+
+## Version 1.0.2
+
+- Restored the missing extension icon and logo.
+- Kept a temporary reveal open across feed rescans and hid its controls correctly.
+- Removed controls and timers for detached posts; watched text changes as well as added posts.
+- Removed broad fallback test words. A missing keyword file now leaves posts visible.
+- Updated labels, documentation, and a fictional demo to explain configurable keyword filtering.
+
+By [Alex Seidler](https://alexseidler.dev). No project-wide software license has been selected; public source access does not itself grant a reuse license.

@@ -219,14 +219,14 @@
 <body>
   <main class="wrap">
     <section class="hero" aria-labelledby="title">
-      <div class="avatar" aria-hidden="true"><img class="avatar-image" src="assets/alex-avatar.png" alt="Friendly cartoon avatar of Alex Seidler, a bald smiling man"></div>
+      <div class="avatar" aria-hidden="true"><img class="avatar-image" src="assets/socialzen-icon.png" alt="SocialZen icon"></div>
       <div>
         <p class="eyebrow">SocialZen by <a href="mailto:agseidler@gmail.com">Alex Seidler</a></p>
         <h1 id="title">Offline installation guide</h1>
         <p class="lede">
-          This guide works offline once the project folder is downloaded. It explains how to load SocialZen in Chrome, Edge, or Safari, with the note that the current build is tested first for Chrome and Edge.
+          This guide works offline once the project folder is downloaded. This package targets desktop Chrome and Edge. Current release checks use fictional posts; signed-in Facebook coverage and native installation have not been verified for this release.
         </p>
-        <img class="hero-art" src="assets/socialzen-guide-hero.png" alt="Calm laptop scene with social-feed notifications fading into a peaceful landscape">
+
       </div>
     </section>
 
@@ -277,10 +277,10 @@
       <article class="card callout">
         <h2>What you get</h2>
         <p>
-          SocialZen by Alex Seidler soft-hides emotionally charged political posts on Facebook so the feed feels calmer and easier to browse. The extension is designed to stay small, readable, and easy to edit.
+          SocialZen by Alex Seidler masks Facebook posts using your chosen keywords. The included list starts with politics, but you can change it to any topics you want a break from. The extension is designed to stay small, readable, and easy to edit.
         </p>
         <p class="note">
-          The keyword lists are meant to be editable in the project files, and the extension is intended to be loaded directly from the unzipped folder.
+          Edit BLOCK_KEYWORDS and OVERRIDE_KEYWORDS in keywords.js. Override phrases keep a post visible. Reload the extension and then Facebook after saving. Matching uses case-insensitive substrings, so broad terms may mask unrelated posts. Temporarily Show reveals a match for four seconds; the popup switch turns filtering off.
         </p>
       </article>
     </section>

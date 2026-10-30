@@ -6,14 +6,12 @@
   var enabled = true;
   var observer = null;
   var refreshTimer = null;
-  var processed = new WeakSet();
   var previewTimers = new WeakMap();
   var controlMap = new WeakMap();
   var logoUrl = chrome.runtime.getURL("assets/socialzen-logo.svg");
 
-  // These fallbacks keep the extension functional if an older browser tab
-  // has a stale manifest and does not load keywords.js yet.
-  var FALLBACK_BLOCK_KEYWORDS = ["socialzen test", "trump", "biden", "white house", "truth social", "politics", "check", "cool", "heart", "love", "look", "at"];
+  // If the keyword file is unavailable, leave posts visible.
+  var FALLBACK_BLOCK_KEYWORDS = [];
 
   var style = document.createElement("style");
   style.id = "facebookzen-styles";
@@ -110,7 +108,7 @@
 
     var label = document.createElement("div");
     label.setAttribute("data-facebookzen-label", "true");
-    label.textContent = "Political content filtered";
+    label.textContent = "Keyword match filtered";
 
     var watermark = document.createElement("img");
     watermark.setAttribute("data-facebookzen-watermark", "true");
@@ -126,12 +124,17 @@
       event.stopPropagation();
       article.classList.remove("facebookzen-filtered");
       article.classList.add("facebookzen-preview");
-      controls.style.display = "none";
+      controls.style.setProperty("display", "none", "important");
       window.clearTimeout(previewTimers.get(article));
       previewTimers.set(article, window.setTimeout(function () {
+        previewTimers.delete(article);
+        if (!enabled || !document.documentElement.contains(article) || !shouldBlock(article)) {
+          processArticle(article);
+          return;
+        }
         article.classList.remove("facebookzen-preview");
         article.classList.add("facebookzen-filtered");
-        controls.style.display = "flex";
+        controls.style.setProperty("display", "flex", "important");
         positionControls(article, controls);
       }, PREVIEW_MS));
     });
@@ -176,19 +179,28 @@
     if (!article || !document.documentElement.contains(article)) return;
     var blocked = enabled && shouldBlock(article);
     if (blocked) {
+      if (previewTimers.has(article)) return;
       if (!controlMap.get(article)) addControls(article);
       article.classList.add("facebookzen-filtered");
       article.classList.remove("facebookzen-preview");
       positionControls(article, controlMap.get(article));
     } else {
       window.clearTimeout(previewTimers.get(article));
+      previewTimers.delete(article);
       article.classList.remove("facebookzen-filtered", "facebookzen-preview");
       removeControls(article);
     }
-    processed.add(article);
   }
 
   function scan(root) {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-facebookzen-controls]"), function (controls) {
+      if (!document.documentElement.contains(controls.__socialZenArticle)) {
+        window.clearTimeout(previewTimers.get(controls.__socialZenArticle));
+        previewTimers.delete(controls.__socialZenArticle);
+        controlMap.delete(controls.__socialZenArticle);
+        controls.remove();
+      }
+    });
     getArticles(root || document).forEach(processArticle);
   }
 
@@ -203,13 +215,13 @@
       applyEnabledState(settings[STORAGE_KEY]);
       observer = new MutationObserver(function (mutations) {
         var shouldScan = mutations.some(function (mutation) {
-          return mutation.addedNodes && mutation.addedNodes.length;
+          return mutation.type === "characterData" || (mutation.addedNodes && mutation.addedNodes.length) || (mutation.removedNodes && mutation.removedNodes.length);
         });
         if (!shouldScan) return;
         window.clearTimeout(refreshTimer);
         refreshTimer = window.setTimeout(function () { scan(document); }, 120);
       });
-      observer.observe(document.body || document.documentElement, { childList: true, subtree: true });
+      observer.observe(document.body || document.documentElement, { childList: true, characterData: true, subtree: true });
       window.addEventListener("scroll", positionAllControls, { passive: true });
       window.addEventListener("resize", positionAllControls);
     });
