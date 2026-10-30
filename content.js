@@ -193,15 +193,21 @@
   }
 
   function scan(root) {
+    var articles = getArticles(root || document);
     Array.prototype.forEach.call(document.querySelectorAll("[data-facebookzen-controls]"), function (controls) {
-      if (!document.documentElement.contains(controls.__socialZenArticle)) {
-        window.clearTimeout(previewTimers.get(controls.__socialZenArticle));
-        previewTimers.delete(controls.__socialZenArticle);
-        controlMap.delete(controls.__socialZenArticle);
+      var article = controls.__socialZenArticle;
+      if (!document.documentElement.contains(article)) {
+        window.clearTimeout(previewTimers.get(article));
+        previewTimers.delete(article);
+        controlMap.delete(article);
         controls.remove();
+      } else if (articles.indexOf(article) === -1) {
+        // A known post can become too short/long for discovery after an update.
+        // Still revisit it so changed text and the off switch can remove its mask.
+        articles.push(article);
       }
     });
-    getArticles(root || document).forEach(processArticle);
+    articles.forEach(processArticle);
   }
 
   function applyEnabledState(value) {

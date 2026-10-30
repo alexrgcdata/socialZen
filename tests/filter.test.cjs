@@ -79,3 +79,22 @@ test('disabling during a reveal cancels the timer and removes masking', async ()
     assert.equal(p.className, ''); assert.equal(f.w.document.querySelectorAll('[data-facebookzen-controls]').length, 0);
   } finally { f.close(); }
 });
+test('a masked post is unmasked when its text becomes too short for discovery', async () => {
+  const f = fixture();
+  try {
+    const p = f.post('An election discussion with enough sample content.'); f.start();
+    assert.ok(p.classList.contains('facebookzen-filtered'));
+    p.firstChild.data = 'Updated'; await pause(200);
+    assert.equal(p.className, '');
+    assert.equal(f.w.document.querySelectorAll('[data-facebookzen-controls]').length, 0);
+  } finally { f.close(); }
+});
+test('the off switch unmasks a known post even if discovery now skips it', () => {
+  const f = fixture();
+  try {
+    const p = f.post('An election discussion with enough sample content.'); f.start();
+    p.firstChild.data = 'election'; f.disable();
+    assert.equal(p.className, '');
+    assert.equal(f.w.document.querySelectorAll('[data-facebookzen-controls]').length, 0);
+  } finally { f.close(); }
+});
