@@ -4,13 +4,13 @@ I built SocialZen because I was tired of political posts taking over my Facebook
 
 SocialZen is a small browser extension that matches the words you choose and uses browser styling to blur, fade, and shorten those posts. The included list starts with politics and arguments, but you can replace it with any subjects you want to avoid.
 
-[Project page](https://alexseidler.dev/work/socialzen/) | [Source](https://github.com/alexrgcdata/socialZen) | [Release v1.0.2](https://github.com/alexrgcdata/socialZen/releases/tag/v1.0.2) | [Download ZIP](https://github.com/alexrgcdata/socialZen/releases/download/v1.0.2/socialzen-1.0.2.zip)
+[Project page](https://alexseidler.dev/work/socialzen/) | [Source](https://github.com/alexrgcdata/socialZen) | [Prerelease v1.0.3](https://github.com/alexrgcdata/socialZen/releases/tag/v1.0.3) | [Download ZIP](https://github.com/alexrgcdata/socialZen/releases/download/v1.0.3/socialzen-1.0.3.zip)
 
-- **Available now:** v1.0.2, installed manually in desktop Chrome or Edge. There is no browser-store release or keyword editor in the popup; you edit `keywords.js`.
+- **Available now:** v1.0.3 prerelease, installed manually in desktop Chrome or Edge. There is no browser-store release or keyword editor in the popup; you edit `keywords.js`.
 - **Checked:** seven automated tests pass on the current source using fictional posts and a simulated extension API. The illustration below runs the actual masking code on a fictional feed.
 - **Still unverified:** current signed-in Facebook coverage and installation as a native Chrome or Edge extension. The demo and tests do not establish those.
 
-The current `main` branch also fixes a mask that could stick when a post changed to very short text. That fix and its two regression tests are **not included in the existing v1.0.2 ZIP**. The published ZIP and tag have been left unchanged.
+Version 1.0.3 includes the fix for a mask that could stick when a post changed to very short text. The earlier [v1.0.2 release](https://github.com/alexrgcdata/socialZen/releases/tag/v1.0.2), ZIP, and tag remain unchanged.
 
 ![Fictional feed demonstration using the actual SocialZen masking code](demo/socialzen-demo.jpg)
 
@@ -50,7 +50,7 @@ The extension code has no analytics, external API calls, or remote filtering ser
 
 This is a text filter. It cannot understand context, recognize words inside images or video, or guarantee every post will be found. Facebook markup can change. The observer still rescans candidate posts across the page, so very long feeds may need performance work.
 
-Version 1.0.2 passed five automated tests of simulated page elements and a browser demonstration using fictional posts and a simulated extension API. The current source adds two regression tests, for seven passing tests. Neither set establishes current coverage of a signed-in Facebook feed or a native Chrome/Edge installation. The screenshot is explicitly labeled as a fictional demonstration.
+Version 1.0.2 passed five automated tests of simulated page elements and a browser demonstration using fictional posts and a simulated extension API. Version 1.0.3 adds two regression tests, for seven passing tests. Neither set establishes current coverage of a signed-in Facebook feed or a native Chrome/Edge installation. The screenshot is explicitly labeled as a fictional demonstration.
 
 ## Development checks
 
@@ -71,9 +71,13 @@ python -m http.server 4198 --bind 127.0.0.1
 
 Then open `http://127.0.0.1:4198/demo/`. The demo never connects to Facebook and does not exercise native extension installation or storage.
 
-## Current source after v1.0.2
+## Version 1.0.3 prerelease
 
-A filtered post whose text changed below the scanner's 20-character minimum could keep its mask, even after filtering was switched off. The current source revisits already masked posts so changed text and the off switch can clear them. Two regression tests reproduce that case. This is an unreleased source fix; use the existing v1.0.2 release when you need the published package, or clone `main` to review the fix.
+A filtered post whose text changed below the scanner's 20-character minimum could keep its mask, even after filtering was switched off. The current source revisits already masked posts so changed text and the off switch can clear them. Two regression tests reproduce that case. This fix is included in the v1.0.3 prerelease ZIP. It is marked as a prerelease because native installation and signed-in Facebook acceptance remain unverified.
+
+## Package a release
+
+From a clean checkout with Python available, run `npm run package`. The script packages only its explicit public-file allow-list, verifies manifest resources and version agreement, and writes the ZIP, SHA-256, and a file-hash receipt under the ignored `release/` directory. It excludes installed dependencies and local/private files. No build or package installation is needed to load the resulting extension.
 
 ## Version 1.0.2
 

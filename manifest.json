@@ -1,11 +1,17 @@
 {
   "manifest_version": 3,
   "name": "SocialZen Keyword Filter",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Mask Facebook posts using your own keywords. Blur matching posts, briefly reveal them, or switch filtering off. By Alex Seidler.",
   "author": "Alex Seidler",
-  "permissions": ["storage"],
-  "host_permissions": ["https://www.facebook.com/*", "https://facebook.com/*", "https://m.facebook.com/*"],
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.facebook.com/*",
+    "https://facebook.com/*",
+    "https://m.facebook.com/*"
+  ],
   "action": {
     "default_title": "SocialZen Keyword Filter",
     "default_icon": "assets/socialzen-icon.png",
@@ -16,15 +22,28 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.facebook.com/*", "https://facebook.com/*", "https://m.facebook.com/*"],
-      "js": ["keywords.js", "content.js"],
+      "matches": [
+        "https://www.facebook.com/*",
+        "https://facebook.com/*",
+        "https://m.facebook.com/*"
+      ],
+      "js": [
+        "keywords.js",
+        "content.js"
+      ],
       "run_at": "document_idle"
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["assets/socialzen-logo.svg"],
-      "matches": ["https://www.facebook.com/*", "https://facebook.com/*", "https://m.facebook.com/*"]
+      "resources": [
+        "assets/socialzen-logo.svg"
+      ],
+      "matches": [
+        "https://www.facebook.com/*",
+        "https://facebook.com/*",
+        "https://m.facebook.com/*"
+      ]
     }
   ]
 }
